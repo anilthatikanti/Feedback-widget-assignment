@@ -19,7 +19,6 @@ const FeedbackForm: React.FC<Props> = ({ onSave, isEdit }) => {
 
   // Load existing feedback from localStorage
   useEffect(() => {
-    console.log('isEdit', isEdit)
     const saved = localStorage.getItem("user-feedback");
     if (saved) {
       const data = JSON.parse(saved);

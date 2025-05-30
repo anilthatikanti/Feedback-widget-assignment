@@ -17,7 +17,7 @@ const App: React.FC = () => {
     }
   }, []);
 
-  function handleSaveFrom(value: FeedbackData) {
+  const handleSaveFrom = (value: FeedbackData)=> {
     setFeedback(value);
     setIsEdit(false);
   }
