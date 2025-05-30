@@ -14,7 +14,7 @@ const FeedbackPreview: React.FC<Props> = ({ feedback ,children }) => {
 
     const renderStars = useMemo(() => {
       const stars = [];
-      let ratingNumber = parseInt(feedback.rating || '1', 10); // if feed comes in decimals then it will convert into integer
+      let ratingNumber = parseInt(feedback.rating||'1');
       ratingNumber = Math.min(Math.max(ratingNumber, 1), 5); // this condition will restrict the rating upto 5 
       for (let i = 1; i <= ratingNumber; i++) {
         stars.push(
