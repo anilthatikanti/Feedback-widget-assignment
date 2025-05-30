@@ -4,9 +4,10 @@ import type { FeedbackData } from "../shared/feedback.interface";
 
 interface Props {
   feedback: FeedbackData;
+  children?: React.ReactNode;
 }
 
-const FeedbackPreview: React.FC<Props> = ({ feedback }) => {
+const FeedbackPreview: React.FC<Props> = ({ feedback ,children }) => {
   // Show message if there's no feedback (all fields are empty or default)
   const isEmpty =
     !feedback.name && !feedback.comment && (!feedback.rating || feedback.rating === '5');
@@ -33,8 +34,11 @@ const FeedbackPreview: React.FC<Props> = ({ feedback }) => {
 
   return (
     <div className="bg-gray-100 p-6 rounded shadow-md max-w-md mx-auto mt-6">
+     <div className="flex items-center justify-between">
       <h2 className="text-lg font-semibold mb-4">Feedback Preview</h2>
-      {isEmpty ? (
+      {!isEmpty&&children}
+      </div>
+       {isEmpty ? (
         <p className="text-gray-500">No feedback available.</p>
       ) : (
         <div className="space-y-2">

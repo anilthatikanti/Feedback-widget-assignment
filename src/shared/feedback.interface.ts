@@ -5,4 +5,7 @@ export interface FeedbackData {
   }
   export interface Props {
     onSave: (data: FeedbackData) => void;
+    isEdit:boolean
   }
+
+  

@@ -1,51 +1,48 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import type { FeedbackData, Props } from '../shared/feedback.interface';
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import type { FeedbackData, Props } from "../shared/feedback.interface";
+import { defaultValue, ratingOptions } from "../shared/feedback.data";
 
-const FeedbackForm: React.FC<Props> = ({ onSave }) => {
+const FeedbackForm: React.FC<Props> = ({ onSave, isEdit }) => {
   // Initialize react-hook-form
+
   const {
     register,
     handleSubmit,
     reset,
-    formState:{errors}
+    formState: { errors },
   } = useForm<FeedbackData>({
     defaultValues: {
-      name: '',
-      rating: '5',
-      comment: '',
+      ...defaultValue,
     },
   });
 
   // Watch form values for live updates (optional)
-//   const formValues = watch();
+  //   const formValues = watch();
 
   // Load existing feedback from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('user-feedback');
+    console.log('isEdit', isEdit)
+    const saved = localStorage.getItem("user-feedback");
     if (saved) {
       const data = JSON.parse(saved);
-      reset(data); // Pre-fill form with saved data
-      onSave(data);
+      if (isEdit) reset(data);
+      else reset(defaultValue); // Pre-fill form with saved data
     }
-  }, [reset, onSave]);
+  }, [isEdit, reset]);
 
   // Form submission handler
   const onSubmit = (data: FeedbackData) => {
-    localStorage.setItem('user-feedback', JSON.stringify(data));
+    localStorage.setItem("user-feedback", JSON.stringify(data));
     onSave(data);
+    reset(defaultValue);
   };
 
   // Reset form and localStorage
   const handleReset = () => {
-    const defaultValues = {
-      name: '',
-      rating: '5',
-      comment: '',
-    };
-    reset(defaultValues);
-    localStorage.removeItem('user-feedback');
-    onSave(defaultValues);
+    reset(defaultValue);
+    localStorage.removeItem("user-feedback");
+    onSave(defaultValue);
   };
 
   return (
@@ -56,32 +53,30 @@ const FeedbackForm: React.FC<Props> = ({ onSave }) => {
       <div>
         <label className="block text-sm font-medium mb-1">Name</label>
         <input
-          {...register('name',{required:true})}
+          {...register("name", { required: true })}
           type="text"
           className="w-full border px-3 py-2 rounded"
           placeholder="Your name"
         />
-         {errors.name && <p className="text-red-500">Name is required.</p>}
+        {errors.name && <p className="text-red-500">Name is required.</p>}
       </div>
 
       <div>
         <label className="block text-sm font-medium mb-1">Rating</label>
         <select
-          {...register('rating',{required:true})}
+          {...register("rating", { required: true })}
           className="w-full border px-3 py-2 rounded"
         >
-          <option value="1">1 - Poor</option>
-          <option value="2">2 - Fair</option>
-          <option value="3">3 - Good</option>
-          <option value="4">4 - Very Good</option>
-          <option value="5">5 - Excellent</option>
+          {ratingOptions.map((rate: any) => {
+            return <option key={rate.value} value={rate.value}>{rate.label}</option>;
+          })}
         </select>
       </div>
 
       <div>
         <label className="block text-sm font-medium mb-1">Comment</label>
         <textarea
-          {...register('comment')}
+          {...register("comment")}
           className="w-full border px-3 py-2 rounded"
           rows={3}
           placeholder="Your feedback"
